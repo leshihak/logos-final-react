@@ -8,8 +8,8 @@ import {
     Typography,
     makeStyles,
     Container,
+    TextField
 } from '@material-ui/core';
-import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { Link } from 'react-router-dom';
 
 interface User {
@@ -63,13 +63,12 @@ export default function SignIn() {
                     <Typography component='h1' variant='h5'>
                         Sign in
                     </Typography>
-                    <ValidatorForm
+                    <form
                         className={classes.form}
                         noValidate
                         onSubmit={handleSubmit}
-                        onError={(errors) => console.log(errors)}
                     >
-                        <TextValidator
+                        <TextField
                             variant='outlined'
                             margin='normal'
                             required
@@ -78,18 +77,13 @@ export default function SignIn() {
                             label='Email Address'
                             name='email'
                             value={email}
-                            validators={['required', 'isEmail']}
-                            errorMessages={[
-                                'This field is required',
-                                'Email is not valid',
-                            ]}
                             autoComplete='email'
                             autoFocus
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => setEmail(event.target.value)}
                         />
-                        <TextValidator
+                        <TextField
                             variant='outlined'
                             margin='normal'
                             required
@@ -98,8 +92,6 @@ export default function SignIn() {
                             label='Password'
                             type='password'
                             id='password'
-                            validators={['required']}
-                            errorMessages={['This field is required']}
                             autoComplete='current-password'
                             value={password}
                             onChange={(
@@ -122,7 +114,7 @@ export default function SignIn() {
                                 </Link>
                             </Grid>
                         </Grid>
-                    </ValidatorForm>
+                    </form>
                 </div>
             </Container>
         </>

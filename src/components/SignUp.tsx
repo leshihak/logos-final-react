@@ -5,19 +5,19 @@ import {
     Button,
     CssBaseline,
     Grid,
+    TextField,
     Typography,
     makeStyles,
     Container,
 } from '@material-ui/core';
 import axios from 'axios';
-import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { Link } from 'react-router-dom';
 
-interface User {
-    fullNameValue: string;
-    emailValue: string;
-    passwordValue: string;
-}
+// interface User {
+//     fullNameValue: string;
+//     emailValue: string;
+//     passwordValue: string;
+// }
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -44,23 +44,25 @@ export default function SignUp() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [objectUser, setObjectUser] = useState<User>();
 
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
-        axios
-            .post('http://localhost:3000/users', {
-                fullNameValue: objectUser?.fullNameValue,
-                emailValue: objectUser?.emailValue,
-                passwordValue: objectUser?.passwordValue,
-            })
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (name && email && password) {
+        } else {
+            axios
+                .post('http://localhost:3001/users', {
+                    fullNameValue: name,
+                    emailValue: email,
+                    passwordValue: password,
+                })
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
 
         // axios
         //     .delete('http://localhost:3000/users')
@@ -80,18 +82,10 @@ export default function SignUp() {
         //         console.log(error);
         //     });
 
-        setObjectUser({
-            fullNameValue: name,
-            emailValue: email,
-            passwordValue: password,
-        });
-
         setName('');
         setEmail('');
         setPassword('');
     };
-
-    console.log(objectUser);
 
     return (
         <>
@@ -108,15 +102,14 @@ export default function SignUp() {
                     <Typography component='h1' variant='h5'>
                         Sign up
                     </Typography>
-                    <ValidatorForm
+                    <form
                         className={classes.form}
                         noValidate
                         onSubmit={handleSubmit}
-                        onError={(errors) => console.log(errors)}
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <TextValidator
+                                <TextField
                                     autoComplete='off'
                                     name='firstName'
                                     variant='outlined'
@@ -126,8 +119,6 @@ export default function SignUp() {
                                     label='Full Name'
                                     value={name}
                                     autoFocus
-                                    validators={['required']}
-                                    errorMessages={['This field is required']}
                                     onChange={(
                                         event: React.ChangeEvent<
                                             HTMLInputElement
@@ -136,7 +127,7 @@ export default function SignUp() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextValidator
+                                <TextField
                                     variant='outlined'
                                     required
                                     fullWidth
@@ -146,11 +137,6 @@ export default function SignUp() {
                                     name='email'
                                     autoComplete='email'
                                     value={email}
-                                    validators={['required', 'isEmail']}
-                                    errorMessages={[
-                                        'This field is required',
-                                        'Email is not valid',
-                                    ]}
                                     onChange={(
                                         event: React.ChangeEvent<
                                             HTMLInputElement
@@ -159,7 +145,7 @@ export default function SignUp() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextValidator
+                                <TextField
                                     variant='outlined'
                                     required
                                     fullWidth
@@ -169,8 +155,6 @@ export default function SignUp() {
                                     id='password'
                                     value={password}
                                     autoComplete='password'
-                                    validators={['required']}
-                                    errorMessages={['This field is required']}
                                     onChange={(
                                         event: React.ChangeEvent<
                                             HTMLInputElement
@@ -195,7 +179,7 @@ export default function SignUp() {
                                 </Link>
                             </Grid>
                         </Grid>
-                    </ValidatorForm>
+                    </form>
                 </div>
             </Container>
         </>

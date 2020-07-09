@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../../logo.png';
 import { Fade } from 'react-awesome-reveal';
@@ -39,6 +39,16 @@ const useStyles = makeStyles({
 
 export default function Pizza() {
     const classes = useStyles();
+    let [clicks, setClicks] = useState<number>(0);
+
+    const incrementItem = () => {
+        if (clicks < 10) setClicks((clicks += 1));
+    };
+
+    const decreaseItem = () => {
+        if (clicks) setClicks((clicks -= 1));
+    };
+
     return (
         <>
             <div className='getStartedHeader'>
@@ -83,9 +93,9 @@ export default function Pizza() {
                                     variant='contained'
                                     color='secondary'
                                 >
-                                    <Button>-</Button>
-                                    <input type='text' disabled value={0} />
-                                    <Button>+</Button>
+                                    <Button onClick={decreaseItem}>-</Button>
+                                    <span className='count'>{clicks}</span>
+                                    <Button onClick={incrementItem}>+</Button>
                                 </ButtonGroup>
                                 <Button variant='contained' color='secondary'>
                                     Order
@@ -118,7 +128,7 @@ export default function Pizza() {
                                     cheese, Bavarian sausages.
                                 </Typography>
                                 <Typography variant='body2' component='p'>
-                                    170 UAH
+                                    175 UAH
                                     <br />
                                     {'30 cm'}
                                 </Typography>
@@ -129,9 +139,9 @@ export default function Pizza() {
                                     variant='contained'
                                     color='secondary'
                                 >
-                                    <Button>-</Button>
-                                    <input type='text' disabled value={0} />
-                                    <Button>+</Button>
+                                    <Button onClick={decreaseItem}>-</Button>
+                                    <span className='count'>{clicks}</span>
+                                    <Button onClick={incrementItem}>+</Button>
                                 </ButtonGroup>
                                 <Button variant='contained' color='secondary'>
                                     Order
@@ -176,9 +186,9 @@ export default function Pizza() {
                                     variant='contained'
                                     color='secondary'
                                 >
-                                    <Button>-</Button>
-                                    <input type='text' disabled value={0} />
-                                    <Button>+</Button>
+                                    <Button onClick={decreaseItem}>-</Button>
+                                    <span className='count'>{clicks}</span>
+                                    <Button onClick={incrementItem}>+</Button>
                                 </ButtonGroup>
                                 <Button variant='contained' color='secondary'>
                                     Order
@@ -221,9 +231,9 @@ export default function Pizza() {
                                     variant='contained'
                                     color='secondary'
                                 >
-                                    <Button>-</Button>
-                                    <input type='text' disabled value={0} />
-                                    <Button>+</Button>
+                                    <Button onClick={decreaseItem}>-</Button>
+                                    <span className='count'>{clicks}</span>
+                                    <Button onClick={incrementItem}>+</Button>
                                 </ButtonGroup>
                                 <Button variant='contained' color='secondary'>
                                     Order
@@ -268,9 +278,9 @@ export default function Pizza() {
                                     variant='contained'
                                     color='secondary'
                                 >
-                                    <Button>-</Button>
-                                    <input type='text' disabled value={0} />
-                                    <Button>+</Button>
+                                    <Button onClick={decreaseItem}>-</Button>
+                                    <span className='count'>{clicks}</span>
+                                    <Button onClick={incrementItem}>+</Button>
                                 </ButtonGroup>
                                 <Button variant='contained' color='secondary'>
                                     Order
@@ -314,9 +324,9 @@ export default function Pizza() {
                                     variant='contained'
                                     color='secondary'
                                 >
-                                    <Button>-</Button>
-                                    <input type='text' disabled value={0} />
-                                    <Button>+</Button>
+                                    <Button onClick={decreaseItem}>-</Button>
+                                    <span className='count'>{clicks}</span>
+                                    <Button onClick={incrementItem}>+</Button>
                                 </ButtonGroup>
                                 <Button variant='contained' color='secondary'>
                                     Order
@@ -340,3 +350,4 @@ export default function Pizza() {
         </>
     );
 }
+

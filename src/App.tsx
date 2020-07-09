@@ -6,6 +6,8 @@ import SignUp from './components/SignUp';
 import SignIn from './components/LogIn';
 import ChooseFoodPage from './components/ChooseFoodPage';
 import Wine from './components/selection/Wine';
+import About from './components/About';
+import Contact from './components/Contact';
 import Burgers from './components/selection/Burgers';
 import Sushi from './components/selection/Sushi';
 import Pizza from './components/selection/Pizza';
@@ -19,7 +21,9 @@ const App = () => {
                 <Route path='/' component={GetStarted} exact />
                 <Route path='/signUp' component={SignUp} />
                 <Route path='/signIn' component={SignIn} />
-                <Route path='/pizzaFolks' component={ChooseFoodPage} />
+                <Route path='/pizzafolks' component={ChooseFoodPage} />
+                <Route path='/about' component={About} />
+                <Route path='/contact' component={Contact} />
                 <Route path='/wine' component={Wine} />
                 <Route path='/burgers' component={Burgers} />
                 <Route path='/sushi' component={Sushi} />

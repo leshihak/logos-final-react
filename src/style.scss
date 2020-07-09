@@ -155,6 +155,20 @@ h2 {
     }
 }
 
+// burger menu
+
+.burger-menu-link {
+    font-size: 20px;
+    margin-top: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: rgba(235, 4, 85, 0.781);
+    &:hover {
+        background-color: rgba(235, 4, 85, 0.13);
+        transition: linear 0.5s;
+    }
+}
+
 // pizza
 
 .pizza-img {
@@ -170,16 +184,12 @@ h2 {
     justify-content: space-around;
     align-items: center;
     margin-bottom: 30px;
+    height: 100vh;
 }
 
-input {
-    max-width: 20px;
-    width: 100%;
+.count {
     text-align: center;
-    font-weight: 700;
-    font-size: larger;
-    border: none;
-    background-color: rgb(255, 255, 255);
+    font-size: 21px;
 }
 
 .MuiCardActions-root {
