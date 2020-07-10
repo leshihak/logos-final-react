@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Logo from '../../logo.png';
+import Arrow from '../../images/up-arrow.svg';
 import { Fade } from 'react-awesome-reveal';
-import Burger1 from '../../images/burger1.jpg';
-import Burger2 from '../../images/burger2.jpg';
-import Burger3 from '../../images/burger3.jpg';
-import Burger4 from '../../images/burger4.jpg';
-import Burger5 from '../../images/burger5.jpg';
-import Burger6 from '../../images/burger6.jpg';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {
     ButtonGroup,
@@ -18,6 +14,17 @@ import {
     Button,
     Typography,
 } from '@material-ui/core';
+
+interface BurgerType {
+    name: string;
+    title: string;
+    ingredients: string;
+    price: number;
+    count: number;
+    img: string;
+    delay: number;
+    id: number;
+}
 
 const useStyles = makeStyles({
     root: {
@@ -39,6 +46,7 @@ const useStyles = makeStyles({
 
 export default function Burgers() {
     const classes = useStyles();
+    const [arrayOfBurgers, setArrayOfBurgers] = useState([]);
     let [clicks, setClicks] = useState<number>(0);
 
     const incrementItem = () => {
@@ -49,276 +57,107 @@ export default function Burgers() {
         if (clicks) setClicks((clicks -= 1));
     };
 
+    useEffect(() => {
+        axios
+            .get('http://localhost:3001/burgers')
+            .then((res) => {
+                setArrayOfBurgers(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    const scrollUp = () => {
+        window.scrollTo(0, 0);
+    };
+
+    const renderBurger = () => {
+        return arrayOfBurgers.map((burger: BurgerType) => {
+            return (
+                <div key={burger.id}>
+                    <Fade delay={burger.delay} className='fade-selection'>
+                        <img
+                            src={burger.img}
+                            alt='Burger'
+                            className='pizza-selection'
+                        />
+                        <div>
+                            <Card className={classes.root} variant='outlined'>
+                                <CardContent>
+                                    <Typography
+                                        className={classes.title}
+                                        color='textSecondary'
+                                        gutterBottom
+                                    >
+                                        {burger.name}
+                                    </Typography>
+                                    <Typography variant='h5' component='h2'>
+                                        {burger.title}
+                                    </Typography>
+                                    <Typography
+                                        className={classes.pos}
+                                        color='textSecondary'
+                                    >
+                                        {burger.ingredients}
+                                    </Typography>
+                                    <Typography variant='body2' component='p'>
+                                        {burger.price} UAH
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <ButtonGroup
+                                        disableElevation
+                                        variant='contained'
+                                        color='secondary'
+                                    >
+                                        <Button onClick={decreaseItem}>
+                                            -
+                                        </Button>
+                                        <span className='count'>
+                                            {burger.count}
+                                        </span>
+                                        <Button onClick={incrementItem}>
+                                            +
+                                        </Button>
+                                    </ButtonGroup>
+                                    <Button
+                                        variant='contained'
+                                        color='secondary'
+                                    >
+                                        Order
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </div>
+                    </Fade>
+                </div>
+            );
+        });
+    };
+
     return (
         <>
             <div className='getStartedHeader'>
                 <img src={Logo} alt='website logo' className='logo' />
-                <Link to='/pizzaFolks' className='getStartedHeaderLink'>
+                <Link to='/pizzafolks' className='getStartedHeaderLink'>
                     {'Back to Pizza Folks'}
                 </Link>
             </div>
 
-            <div>
-                <Fade delay={100} className='fade-pizza'>
-                    <img src={Burger1} alt='Pizz' className='pizza-img' />
-                    <div>
-                        <Card className={classes.root} variant='outlined'>
-                            <CardContent>
-                                <Typography
-                                    className={classes.title}
-                                    color='textSecondary'
-                                    gutterBottom
-                                >
-                                    Burger
-                                </Typography>
-                                <Typography variant='h5' component='h2'>
-                                    CLASSIC SMASH
-                                </Typography>
-                                <Typography
-                                    className={classes.pos}
-                                    color='textSecondary'
-                                >
-                                    Served with lettuce, tomato, onion, pickles.
-100% Certified Angus Beef®. Black Bean burgers include American cheese, Smash Sauce, ketchup on a classic bun.
-                                </Typography>
-                                <Typography variant='body2' component='p'>
-                                    170 UAH
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <ButtonGroup
-                                    disableElevation
-                                    variant='contained'
-                                    color='secondary'
-                                >
-                                    <Button onClick={decreaseItem}>-</Button>
-                                    <span className='count'>{clicks}</span>
-                                    <Button onClick={incrementItem}>+</Button>
-                                </ButtonGroup>
-                                <Button variant='contained' color='secondary'>
-                                    Order
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </div>
-                </Fade>
-
-                <Fade delay={200} className='fade-pizza'>
-                    <img src={Burger2} alt='Pizza' className='pizza-img' />
-                    <div>
-                        <Card className={classes.root} variant='outlined'>
-                            <CardContent>
-                                <Typography
-                                    className={classes.title}
-                                    color='textSecondary'
-                                    gutterBottom
-                                >
-                                    Burger
-                                </Typography>
-                                <Typography variant='h5' component='h2'>
-                                    BACON SMASH
-                                </Typography>
-                                <Typography
-                                    className={classes.pos}
-                                    color='textSecondary'
-                                >
-                                    Applewood smoked bacon, American cheese, lettuce, tomato, mayo on a classic bun.
-                                </Typography>
-                                <Typography variant='body2' component='p'>
-                                    175 UAH
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <ButtonGroup
-                                    disableElevation
-                                    variant='contained'
-                                    color='secondary'
-                                >
-                                    <Button onClick={decreaseItem}>-</Button>
-                                    <span className='count'>{clicks}</span>
-                                    <Button onClick={incrementItem}>+</Button>
-                                </ButtonGroup>
-                                <Button variant='contained' color='secondary'>
-                                    Order
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </div>
-                </Fade>
-
-                <Fade delay={300} className='fade-pizza'>
-                    <img src={Burger3} alt='Pizza' className='pizza-img' />
-                    <div>
-                        <Card className={classes.root} variant='outlined'>
-                            <CardContent>
-                                <Typography
-                                    className={classes.title}
-                                    color='textSecondary'
-                                    gutterBottom
-                                >
-                                    Burger
-                                </Typography>
-                                <Typography variant='h5' component='h2'>
-                                    
-BACON AVOCADO CLUB
-                                </Typography>
-                                <Typography
-                                    className={classes.pos}
-                                    color='textSecondary'
-                                >
-                                    With lettuce, tomato, ranch dressing, mayo on a multi-grain bun.
-                                </Typography>
-                                <Typography variant='body2' component='p'>
-                                    130 UAH
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <ButtonGroup
-                                    disableElevation
-                                    variant='contained'
-                                    color='secondary'
-                                >
-                                    <Button onClick={decreaseItem}>-</Button>
-                                    <span className='count'>{clicks}</span>
-                                    <Button onClick={incrementItem}>+</Button>
-                                </ButtonGroup>
-                                <Button variant='contained' color='secondary'>
-                                    Order
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </div>
-                </Fade>
-
-                <Fade delay={400} className='fade-pizza'>
-                    <img src={Burger4} alt='Pizza' className='pizza-img' />
-                    <div>
-                        <Card className={classes.root} variant='outlined'>
-                            <CardContent>
-                                <Typography
-                                    className={classes.title}
-                                    color='textSecondary'
-                                    gutterBottom
-                                >
-                                    Burger
-                                </Typography>
-                                <Typography variant='h5' component='h2'>
-                                    BBQ, BACON, CHEDDAR
-                                </Typography>
-                                <Typography
-                                    className={classes.pos}
-                                    color='textSecondary'
-                                >
-                                    With haystack onions on a classic bun.
-                                </Typography>
-                                <Typography variant='body2' component='p'>
-                                    140 UAH
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <ButtonGroup
-                                    disableElevation
-                                    variant='contained'
-                                    color='secondary'
-                                >
-                                    <Button onClick={decreaseItem}>-</Button>
-                                    <span className='count'>{clicks}</span>
-                                    <Button onClick={incrementItem}>+</Button>
-                                </ButtonGroup>
-                                <Button variant='contained' color='secondary'>
-                                    Order
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </div>
-                </Fade>
-
-                <Fade delay={500} className='fade-pizza'>
-                    <img src={Burger5} alt='Pizza' className='pizza-img' />
-                    <div>
-                        <Card className={classes.root} variant='outlined'>
-                            <CardContent>
-                                <Typography
-                                    className={classes.title}
-                                    color='textSecondary'
-                                    gutterBottom
-                                >
-                                    Burger
-                                </Typography>
-                                <Typography variant='h5' component='h2'>
-                                    SPICY JALAPEÑO BAJA
-                                </Typography>
-                                <Typography
-                                    className={classes.pos}
-                                    color='textSecondary'
-                                >
-                                    With guacamole, pepper jack, lettuce, tomato, onion, chipotle mayo on a spicy chipotle bun.
-                                </Typography>
-                                <Typography variant='body2' component='p'>
-                                    150 UAH
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <ButtonGroup
-                                    disableElevation
-                                    variant='contained'
-                                    color='secondary'
-                                >
-                                    <Button onClick={decreaseItem}>-</Button>
-                                    <span className='count'>{clicks}</span>
-                                    <Button onClick={incrementItem}>+</Button>
-                                </ButtonGroup>
-                                <Button variant='contained' color='secondary'>
-                                    Order
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </div>
-                </Fade>
-
-                <Fade delay={600} className='fade-pizza'>
-                    <img src={Burger6} alt='Pizza' className='pizza-img' />
-                    <div>
-                        <Card className={classes.root} variant='outlined'>
-                            <CardContent>
-                                <Typography
-                                    className={classes.title}
-                                    color='textSecondary'
-                                    gutterBottom
-                                >
-                                    Burger
-                                </Typography>
-                                <Typography variant='h5' component='h2'>
-                                    TRUFFLE MUSHROOM SWISS
-                                </Typography>
-                                <Typography
-                                    className={classes.pos}
-                                    color='textSecondary'
-                                >
-                                    With sautéed crimini mushrooms, truffle mayo on a classic bun.
-                                </Typography>
-                                <Typography variant='body2' component='p'>
-                                    160 UAH
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <ButtonGroup
-                                    disableElevation
-                                    variant='contained'
-                                    color='secondary'
-                                >
-                                    <Button onClick={decreaseItem}>-</Button>
-                                    <span className='count'>{clicks}</span>
-                                    <Button onClick={incrementItem}>+</Button>
-                                </ButtonGroup>
-                                <Button variant='contained' color='secondary'>
-                                    Order
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </div>
-                </Fade>
+            <div className='choose-food-block'>
+                <Link to='/pizza' className='choose-food-link'>
+                    {'Pizza'}
+                </Link>
+                <Link to='/sushi' className='choose-food-link'>
+                    {'Sushi'}
+                </Link>
+                <Link to='/wine' className='choose-food-link'>
+                    {'Wine'}
+                </Link>
             </div>
+
+            {renderBurger()}
 
             <div className='userCartBlock'>
                 <Link to='/cart'>
@@ -330,7 +169,13 @@ BACON AVOCADO CLUB
                 </Link>
                 <h3>Your Cart is here</h3>
             </div>
+
+            <img
+                src={Arrow}
+                alt='arrow'
+                className='arrow-up'
+                onClick={scrollUp}
+            />
         </>
     );
 }
-

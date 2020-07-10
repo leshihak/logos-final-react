@@ -1,0 +1,265 @@
+{
+  "users": [
+    {
+      "nameValue": "Natalia Leshchak",
+      "emailValue": "s",
+      "passwordValue": "s",
+      "id": 1
+    }
+  ],
+  "cart": [],
+  "pizzas": [
+    {
+      "name": "Pizza",
+      "title": "Diabola",
+      "ingredients": "Tomato sauce, mozzarella cheese, chili pepper, pepperoni.",
+      "price": 170,
+      "size": "30 cm",
+      "count": 0,
+      "img": "/static/media/pizza1.0db9e2fe.png",
+      "delay": 100,
+      "id": 1
+    },
+    {
+      "name": "Pizza",
+      "title": "Carbonara",
+      "ingredients": "Tomato sauce, ham, baked egg, mozzarella cheese, Bavarian sausages.",
+      "price": 175,
+      "size": "30 cm",
+      "count": 0,
+      "img": "/static/media/pizza2.323f7186.jpg",
+      "delay": 200,
+      "id": 2
+    },
+    {
+      "name": "Pizza",
+      "title": "Quattro Formaggi",
+      "ingredients": "Cream sauce, parmesan cheese, mozzarella cheese, ricotta cheese, dorblu cheese, walnut, pear.",
+      "price": 130,
+      "size": "30 cm",
+      "count": 0,
+      "img": "/static/media/pizza3.f071a659.jpg",
+      "delay": 300,
+      "id": 3
+    },
+    {
+      "name": "Pizza",
+      "title": "Margarita",
+      "ingredients": "Tomato sauce, mozzarella cheese, tomatoes.",
+      "price": 140,
+      "size": "30 cm",
+      "count": 0,
+      "img": "/static/media/pizza4.da4f4850.jpg",
+      "delay": 400,
+      "id": 4
+    },
+    {
+      "name": "Pizza",
+      "title": "Cesario",
+      "ingredients": "Creamy sauce, tomatoes, crispy salad, parmesan cheese, chicken, mozzarella cheese, quail eggs.",
+      "price": 150,
+      "size": "30 cm",
+      "count": 0,
+      "img": "/static/media/pizza5.6f1c3662.jpg",
+      "delay": 500,
+      "id": 5
+    },
+    {
+      "name": "Pizza",
+      "title": "Capricciosa",
+      "ingredients": "Tomato sauce, mozzarella cheese,ham, fresh mushrooms.",
+      "price": 160,
+      "size": "30 cm",
+      "count": 0,
+      "img": "/static/media/pizza6.9d37641b.jpg",
+      "delay": 600,
+      "id": 6
+    }
+  ],
+  "burgers": [
+    {
+      "name": "Burger",
+      "title": "CLASSIC SMASH",
+      "ingredients": "Served with lettuce, tomato, onion, pickles. 100% Certified Angus Beef®. Black Bean burgers include American cheese, Smash Sauce, ketchup on a classic bun.",
+      "price": 170,
+      "count": 0,
+      "img": "/static/media/burger1.1e611150.jpg",
+      "delay": 100,
+      "id": 11
+    },
+    {
+      "name": "Burger",
+      "title": "BACON SMASH",
+      "ingredients": "Applewood smoked bacon, American cheese, lettuce, tomato, mayo on a classic bun.",
+      "price": 175,
+      "count": 0,
+      "img": "/static/media/burger2.f3f3e68b.jpg",
+      "delay": 200,
+      "id": 12
+    },
+    {
+      "name": "Burger",
+      "title": "BACON AVOCADO CLUB",
+      "ingredients": "With lettuce, tomato, ranch dressing, mayo on a multi-grain bun.",
+      "price": 130,
+      "count": 0,
+      "img": "/static/media/burger3.9e7e1f6c.jpg",
+      "delay": 300,
+      "id": 13
+    },
+    {
+      "name": "Burger",
+      "title": "BBQ, BACON, CHEDDAR",
+      "ingredients": "With haystack onions on a classic bun.",
+      "price": 140,
+      "count": 0,
+      "img": "/static/media/burger4.220d27a0.jpg",
+      "delay": 400,
+      "id": 14
+    },
+    {
+      "name": "Burger",
+      "title": "SPICY JALAPEÑO BAJA",
+      "ingredients": "With guacamole, pepper jack, lettuce,tomato, onion, chipotle mayo on a spicy chipotle bun.",
+      "price": 150,
+      "count": 0,
+      "img": "/static/media/burger5.89ef3aec.jpg",
+      "delay": 500,
+      "id": 15
+    },
+    {
+      "name": "Burger",
+      "title": "TRUFFLE MUSHROOM SWISS",
+      "ingredients": "With sautéed crimini mushrooms, truffle mayo on a classic bun.",
+      "price": 160,
+      "count": 0,
+      "img": "/static/media/burger6.a86c8638.jpg",
+      "delay": 600,
+      "id": 16
+    }
+  ],
+  "sushi": [
+    {
+      "name": "Sushi",
+      "title": "GUNKAN SEAWEED",
+      "ingredients": "Marinated algae, rise, nori",
+      "price": 170,
+      "count": 0,
+      "img": "/static/media/sushi1.0b090e02.jpg",
+      "delay": 100,
+      "id": 21
+    },
+    {
+      "name": "Sushi",
+      "title": "GUNKAN “TOBIKO”",
+      "ingredients": "Tobiko caviar, rise, nori",
+      "price": 175,
+      "count": 0,
+      "img": "/static/media/sushi2.b19c932a.jpg",
+      "delay": 200,
+      "id": 22
+    },
+    {
+      "name": "Sushi",
+      "title": "NIGIRI “SAKE”",
+      "ingredients": "Salmon, rise",
+      "price": 130,
+      "count": 0,
+      "img": "/static/media/sushi3.9dc43f8b.jpg",
+      "delay": 300,
+      "id": 23
+    },
+    {
+      "name": "Sushi",
+      "title": "NIGIRI “HOTATE”",
+      "ingredients": "Sea scallop, rise, nori",
+      "price": 140,
+      "count": 0,
+      "img": "/static/media/sushi4.e65578b7.jpg",
+      "delay": 400,
+      "id": 24
+    },
+    {
+      "name": "Sushi",
+      "title": "GUNKAN “EBI”",
+      "ingredients": "Tiger shrimp, avocado, japanese mayonnaise, rise, nori",
+      "price": 150,
+      "count": 0,
+      "img": "/static/media/sushi5.c1489acf.jpg",
+      "delay": 500,
+      "id": 25
+    },
+    {
+      "name": "Sushi",
+      "title": "NIGIRI “KUNSEI”",
+      "ingredients": "Smoked salmon, rise",
+      "price": 160,
+      "count": 0,
+      "img": "/static/media/sushi6.0fc75b19.jpg",
+      "delay": 600,
+      "id": 26
+    }
+  ],
+  "wine": [
+    {
+      "name": "Wine",
+      "title": "Veuve Monsigny Champagne Brut",
+      "ingredients": "A bestseller and highly acclaimed award-winner from the small, consistently excellent Champagne house Philizot & Fils. This blend of Chardonnay, Pinot Noir and Pinot Meunier has been aged in cellars to enhance its complexity, elegance and length.",
+      "price": 170,
+      "count": 0,
+      "img": "/static/media/wine1.7fb88dcb.jpg",
+      "delay": 100,
+      "id": 31
+    },
+    {
+      "name": "Wine",
+      "title": "Organic Prosecco",
+      "ingredients": "Eco-friendly fizz sourced from the Corvezzo family’s 150-hectare estate, 30km north-east of Venice. Grown with no pesticides or herbicides used in the vineyard, the grapes are predominately hand picked and gently pressed to ensure only the highest quality of juice is used. The winery is also committed to using renewable energy wherever possible.",
+      "price": 175,
+      "count": 0,
+      "img": "/static/media/wine2.460020fe.jpg",
+      "delay": 200,
+      "id": 32
+    },
+    {
+      "name": "Wine",
+      "title": "Blanc De Blanc",
+      "ingredients": "A pale gold colour, with a well balanced and persistent perlange. This Castellore Vino Spumante has an inviting aroma with hints of citrus fruits and flowers. Serve at 6-8 degrees with appetizers, fish and seafood dishes or desserts and confectionery.",
+      "price": 130,
+      "count": 0,
+      "img": "/static/media/wine3.73d9327c.jpg",
+      "delay": 300,
+      "id": 33
+    },
+    {
+      "name": "Wine",
+      "title": "Rosé-Spumante",
+      "ingredients": "A classic and elegant Italian rosé sparkling wine, with intense summer fruits, pears and citrus freshness. Delicious served chilled as an apéritif.",
+      "price": 140,
+      "count": 0,
+      "img": "/static/media/wine4.86565107.jpg",
+      "delay": 400,
+      "id": 34
+    },
+    {
+      "name": "Wine",
+      "title": "Exquisite Clare Valley Riesling",
+      "ingredients": "An exceptional dry Riesling showing a characteristic steeliness to the green apple, lime and grapefruit notes. Citrus softens to subtle tangerine and the refreshing minerality creates a sustained and mouth-watering finish. Delicious with seafood, mild Chinese and Thai dishes, or salads.",
+      "price": 150,
+      "count": 0,
+      "img": "/static/media/wine5.e4109049.jpg",
+      "delay": 500,
+      "id": 35
+    },
+    {
+      "name": "Wine",
+      "title": "Marlborough Sauvignon",
+      "ingredients": "Complex aromas of white stone fruits and blackcurrant leaf give way to flavours of lime-drizzled nectarine and an intriguingly soft texture, with a long and thoughtful finish.",
+      "price": 160,
+      "count": 0,
+      "img": "/static/media/wine6.18a430c7.jpg",
+      "delay": 600,
+      "id": 36
+    }
+  ]
+}

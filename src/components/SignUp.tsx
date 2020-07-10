@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../logo.png';
 import {
     Avatar,
@@ -11,13 +11,13 @@ import {
     Container,
 } from '@material-ui/core';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
-// interface User {
-//     fullNameValue: string;
-//     emailValue: string;
-//     passwordValue: string;
-// }
+interface User {
+    nameValue: string;
+    emailValue: string;
+    passwordValue: string;
+}
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -40,51 +40,98 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+    const redirect = useHistory();
     const classes = useStyles();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorUsedEmail, setErrorUsedEmail] = useState('');
+    const [errorEmptyInput, setErrorEmptyInput] = useState('');
+    const [invalidEmail, setInvalidEmail] = useState('');
+    const [invalidPassword, setInvalidPassword] = useState('');
+    const [arrayOfUsers, setArrayOfUsers] = useState([]);
+
+    const validEmailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6})$/;
+
+    useEffect(() => {
+        axios
+            .get('http://localhost:3001/users')
+            .then((res) => {
+                setArrayOfUsers(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
+        // ?????
+
+        // if (email.length <= 2) validEmailRegex.test(email);
+        // else setInvalidEmail('Invalid Email');
+
+        // if (password.length < 6)
+        //     setInvalidPassword('Password must be 6 characters long');
+        // else setInvalidPassword('');
+
+        // ?????
+
         if (name && email && password) {
+            const find = arrayOfUsers.find(
+                (user: User) => user.emailValue === email
+            );
+            if (find !== undefined) {
+                setErrorUsedEmail('This email is already used');
+            } else {
+                // if (email) validEmailRegex.test(email);
+                // else if (email.length <= 2) setInvalidEmail('Invalid Email');
+                // else if (password.length <= 6)
+                //     setInvalidPassword('Password must be 6 characters long');
+                // else if (password.length >= 6) setInvalidPassword('');
+                // else {
+                //     axios
+                //         .post('http://localhost:3001/users', {
+                //             nameValue: name,
+                //             emailValue: email,
+                //             passwordValue: password,
+                //         })
+                //         .then((res) => {
+                //             console.log(res.data);
+                //         })
+                //         .catch((error) => {
+                //             console.log(error);
+                //         });
+
+                //     redirect.push('/signin');
+                // }
+
+                // if (email.length <= 2) validEmailRegex.test(email);
+                // else setInvalidEmail('Invalid Email');
+
+                // if (password.length < 6)
+                //     setInvalidPassword('Password must be 6 characters long');
+                // else setInvalidPassword('');
+
+                axios
+                    .post('http://localhost:3001/users', {
+                        nameValue: name,
+                        emailValue: email,
+                        passwordValue: password,
+                    })
+                    .then((res) => {
+                        console.log(res.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+                redirect.push('/signin');
+            }
         } else {
-            axios
-                .post('http://localhost:3001/users', {
-                    fullNameValue: name,
-                    emailValue: email,
-                    passwordValue: password,
-                })
-                .then((res) => {
-                    console.log(res.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            setErrorEmptyInput('Maybe some inputs are empty');
         }
-
-        // axios
-        //     .delete('http://localhost:3000/users')
-        //     .then((resp) => {
-        //         resp.data.filter(
-        //             (el: {
-        //                 fullNameValue: string;
-        //                 emailValue: string;
-        //                 passwordValue: string;
-        //                 id: number;
-        //             }) => {
-        //                 // el.emailValue !== resp.data.emailValue;
-        //             }
-        //         );
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
-
-        setName('');
-        setEmail('');
-        setPassword('');
     };
 
     return (
@@ -116,7 +163,7 @@ export default function SignUp() {
                                     required
                                     fullWidth
                                     id='firstName'
-                                    label='Full Name'
+                                    label='Name'
                                     value={name}
                                     autoFocus
                                     onChange={(
@@ -143,6 +190,9 @@ export default function SignUp() {
                                         >
                                     ) => setEmail(event.target.value)}
                                 />
+                                {errorUsedEmail}
+                                <br />
+                                {invalidEmail}
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -161,6 +211,9 @@ export default function SignUp() {
                                         >
                                     ) => setPassword(event.target.value)}
                                 />
+                                {invalidPassword}
+                                <br />
+                                {errorEmptyInput}
                             </Grid>
                         </Grid>
                         <Button
@@ -174,7 +227,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justify='center'>
                             <Grid item>
-                                <Link to='/signIn'>
+                                <Link to='/signin'>
                                     {'Already have an account? Sign in'}
                                 </Link>
                             </Grid>

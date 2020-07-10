@@ -19,13 +19,13 @@ const App = () => {
         <BrowserRouter>
             <Switch>
                 <Route path='/' component={GetStarted} exact />
-                <Route path='/signUp' component={SignUp} />
-                <Route path='/signIn' component={SignIn} />
+                <Route path='/signup' component={SignUp} />
+                <Route path='/signin' component={SignIn} />
                 <Route path='/pizzafolks' component={ChooseFoodPage} />
                 <Route path='/about' component={About} />
                 <Route path='/contact' component={Contact} />
                 <Route path='/wine' component={Wine} />
-                <Route path='/burgers' component={Burgers} />
+                <Route path='/burger' component={Burgers} />
                 <Route path='/sushi' component={Sushi} />
                 <Route path='/pizza' component={Pizza} />
                 <Route path='/cart' component={Cart} />

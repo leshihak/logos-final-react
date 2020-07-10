@@ -20,7 +20,7 @@ const GetStarted = () => {
         <div className='getStartedBlock'>
             <div className='getStartedHeader'>
                 <img src={Logo} alt='website logo' className='logo' />
-                <Link to='/signIn' className='getStartedHeaderLink'>
+                <Link to='/signin' className='getStartedHeaderLink'>
                     {'Sign In'}
                 </Link>
             </div>
@@ -99,24 +99,9 @@ const GetStarted = () => {
                 />
             ) : null}
 
-            <Link className='getStartedHeaderLink' to='/signUp'>
+            <Link className='getStartedHeaderLink' to='/signup'>
                 {'Sign Up'}
             </Link>
-
-            <div className='aboutUs'>
-                <div className='line' />
-                <h1>Why we?</h1>
-                <div>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Nihil aspernatur consectetur nam ipsam, ut aut expedita
-                    numquam quo sunt eligendi odio possimus modi nemo iure
-                    ducimus natus ipsa, deleniti nostrum. Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Maxime perspiciatis id
-                    soluta nulla eligendi exercitationem cumque. Alias
-                    asperiores perspiciatis soluta, aliquam optio facere eaque
-                    voluptatibus ipsum sequi eligendi maiores vel.
-                </div>
-            </div>
         </div>
     );
 };

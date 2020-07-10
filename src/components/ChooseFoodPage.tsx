@@ -18,70 +18,6 @@ import {
     ListItem,
 } from '@material-ui/core';
 
-// const arrayOfPizzas = [
-//     {
-//         pizza: 'Pizza',
-//         title: 'Diabola',
-//         ingredients: 'Tomato sauce, mozzarella cheese, chili pepper, pepperoni.',
-//         price: 170,
-//         size: '30 cm',
-//         count: 0,
-//         img: '',
-//         id: uuidv4()
-//     },
-//     {
-//         pizza: 'Pizza',
-//         title: 'Carbonara',
-//         ingredients: 'Tomato sauce, ham, baked egg, mozzarella cheese, Bavarian sausages.',
-//         price: 175,
-//         size: '30 cm',
-//         count: 0,
-//         img: '',
-//         id: uuidv4()
-//     },
-//     {
-//         pizza: 'Pizza',
-//         title: 'Quattro Formaggi',
-//         ingredients: 'Cream sauce, parmesan cheese, mozzarella cheese, ricotta cheese, dorblu cheese, walnut, pear.',
-//         price: 130,
-//         size: '30 cm',
-//         count: 0,
-//         img: '',
-//         id: uuidv4()
-//     },
-//     {
-//         pizza: 'Pizza',
-//         title: 'Margarita',
-//         ingredients: 'Tomato sauce, mozzarella cheese, tomatoes.',
-//         price: 140,
-//         size: '30 cm',
-//         count: 0,
-//         img: '',
-//         id: uuidv4()
-//     },
-//     {
-//         pizza: 'Pizza',
-//         title: 'Cesario',
-//         ingredients: 'Creamy sauce, tomatoes, crispy salad, parmesan cheese, chicken, mozzarella cheese, quail eggs.',
-//         price: 150,
-//         size: '30 cm',
-//         count: 0,
-//         img: '',
-//         id: uuidv4()
-//     },
-//     {
-//         pizza: 'Pizza',
-//         title: 'Capricciosa',
-//         ingredients: 'Tomato sauce, mozzarella cheese,ham, fresh mushrooms.',
-//         price: 160,
-//         size: '30 cm',
-//         count: 0,
-//         img: '',
-//         id: uuidv4()
-//     },
-    
-// ]
-
 const useStyles = makeStyles({
     list: {
         width: 250,
@@ -142,6 +78,7 @@ export default function ChooseFoodPage() {
             </List>
         </div>
     );
+
     return (
         <>
             <div className='getStartedHeader'>
@@ -198,7 +135,7 @@ export default function ChooseFoodPage() {
                         alt='Burgers'
                         className='chooseFoodPage-img'
                     />
-                    <Link to='/burgers' className='chooseFoodLink'>
+                    <Link to='/burger' className='chooseFoodLink'>
                         {'Choose Burgers'}
                     </Link>
                 </Fade>
