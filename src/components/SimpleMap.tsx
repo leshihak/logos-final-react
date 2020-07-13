@@ -4,7 +4,7 @@ import Marker from './Marker.jsx';
 
 const SimpleMap = () => {
     const [center] = useState({ lat: 49.839684, lng: 24.029716 });
-    const zoom = 11;
+    const zoom = 14;
     return (
         <div style={{ height: '200px', width: '100%' }}>
             <GoogleMapReact
@@ -16,7 +16,7 @@ const SimpleMap = () => {
             >
                 <Marker
                     name='My Marker'
-                    color='blue'
+                    color='rgb(179, 212, 252)'
                     lat={49.839684}
                     lng={24.029716}
                 />

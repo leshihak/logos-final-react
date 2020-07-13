@@ -26,6 +26,7 @@ interface PizzaType {
     id: number;
     order: boolean;
     orderPrice: number;
+    orderText: string;
 }
 
 const useStyles = makeStyles({
@@ -49,16 +50,16 @@ const useStyles = makeStyles({
 export default function Pizza() {
     const classes = useStyles();
     const [arrayOfPizzas, setArrayOfPizzas] = useState<any[]>([]);
-    const [orderText, setOrderText] = useState<string>('');
 
     const incrementItem = (id: number) => {
         const pizza = arrayOfPizzas.find((pizza) => pizza.id === id);
         if (pizza.count < 10) pizza.count++;
         setArrayOfPizzas([...arrayOfPizzas]);
 
-        pizza.count <= 1
-            ? (pizza.orderPrice = pizza.price)
-            : (pizza.orderPrice = pizza.count * pizza.price);
+        if (pizza.count === 0) {
+            pizza.orderText = '';
+            pizza.orderPrice = pizza.price;
+        } else pizza.orderPrice = pizza.count * pizza.price;
 
         axios
             .put(`http://localhost:3001/pizzas/${id}/`, pizza)
@@ -72,9 +73,10 @@ export default function Pizza() {
         if (pizza.count) pizza.count--;
         setArrayOfPizzas([...arrayOfPizzas]);
 
-        pizza.count === 0
-            ? (pizza.orderPrice = pizza.price)
-            : (pizza.orderPrice = pizza.count * pizza.price);
+        if (pizza.count === 0) {
+            pizza.orderText = '';
+            pizza.orderPrice = pizza.price;
+        } else pizza.orderPrice = pizza.count * pizza.price;
 
         axios
             .put(`http://localhost:3001/pizzas/${id}/`, pizza)
@@ -87,21 +89,13 @@ export default function Pizza() {
         const pizza = arrayOfPizzas.find((pizza) => pizza.id === id);
         setArrayOfPizzas([...arrayOfPizzas]);
 
-        if (pizza.count === 0) {
-            setOrderText('');
-            pizza.order = false;
-        } else {
-            setOrderText(
-                `You order ${pizza.name} ${pizza.title}, amount of ${pizza.count} pieces, price: ${pizza.orderPrice} UAH.`
-            );
-            pizza.order = true;
-        }
+        pizza.count === 0
+            ? (pizza.orderText = '')
+            : (pizza.orderText = `You order ${pizza.name} ${pizza.title}, amount of ${pizza.count} pieces, price: ${pizza.orderPrice} UAH.`);
 
-        axios
-            .put(`http://localhost:3001/pizzas/${id}/`, pizza)
-            .catch((error) => {
-                console.log(error);
-            });
+        axios.post('http://localhost:3001/cart', pizza).catch((error) => {
+            console.log(error);
+        });
     };
 
     useEffect(() => {
@@ -114,6 +108,31 @@ export default function Pizza() {
                 console.log(error);
             });
     }, []);
+
+    const filterCheapItems = () => {
+        const cheapFood = arrayOfPizzas.sort((a, b) =>
+            a.price > b.price ? 1 : b.price > a.price ? -1 : 0
+        );
+        setArrayOfPizzas([...cheapFood]);
+    };
+
+    const filterExpensiveItems = () => {
+        const expensiveFood = arrayOfPizzas.sort((a, b) =>
+            a.price < b.price ? 1 : b.price < a.price ? -1 : 0
+        );
+        setArrayOfPizzas([...expensiveFood]);
+    };
+
+    const resetFilter = () => {
+        axios
+            .get('http://localhost:3001/burgers')
+            .then((res) => {
+                setArrayOfPizzas(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const scrollUp = () => {
         window.scrollTo(0, 0);
@@ -190,7 +209,7 @@ export default function Pizza() {
                                 </CardActions>
                                 <br />
                                 <Typography variant='body2' component='p'>
-                                    {orderText}
+                                    {pizza.orderText}
                                 </Typography>
                             </Card>
                         </div>
@@ -219,6 +238,31 @@ export default function Pizza() {
                 <Link to='/wine' className='choose-food-link'>
                     {'Wine'}
                 </Link>
+            </div>
+
+            <div className='filter-block'>
+                <h2>Filter: </h2>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterCheapItems}
+                >
+                    Cheaper
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterExpensiveItems}
+                >
+                    More expensive
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='secondary'
+                    onClick={resetFilter}
+                >
+                    Reset
+                </Button>
             </div>
 
             {renderPizza()}

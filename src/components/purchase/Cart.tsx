@@ -45,81 +45,38 @@ const useStyles = makeStyles({
 
 export default function Cart() {
     const classes = useStyles();
-    const [arrayOfWine, setArrayOfWine] = useState<any[]>([]);
-    const [arrayOfSushi, setArrayOfSushi] = useState<any[]>([]);
-    const [arrayOfPizzas, setArrayOfPizzas] = useState<any[]>([]);
-    const [arrayOfBurgers, setArrayOfBurgers] = useState<any[]>([]);
+    const [arrayOfOrderFood, setArrayOfOrderFood] = useState<any[]>([]);
 
     useEffect(() => {
         axios
-            .get('http://localhost:3001/wine')
+            .get('http://localhost:3001/cart')
             .then((res) => {
-                setArrayOfWine(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-        axios
-            .get('http://localhost:3001/sushi')
-            .then((res) => {
-                setArrayOfSushi(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-        axios
-            .get('http://localhost:3001/burgers')
-            .then((res) => {
-                setArrayOfBurgers(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-        axios
-            .get('http://localhost:3001/pizzas')
-            .then((res) => {
-                setArrayOfPizzas(res.data);
+                setArrayOfOrderFood(res.data);
             })
             .catch((error) => {
                 console.log(error);
             });
     }, []);
 
-    let newArrayWithItems = arrayOfBurgers.concat(
-        arrayOfPizzas,
-        arrayOfSushi,
-        arrayOfWine
-    );
+    const handleDeleteFood = (id: number) => {
+        const food = arrayOfOrderFood.find((food) => food.id === id);
 
-    let arrayOfOrderFood = newArrayWithItems.filter(
-        (food) => food.order === true
-    );
-
-    // useEffect(() => {
-    //     axios
-    //         .post('http://localhost:3001/cart', arrayOfOrderFood)
-    //         .then((res) => {
-    //             console.log(res.data);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // });
-
-    console.log(arrayOfOrderFood);
-
-    // const handleDeleteFood = (id: number) => {
-    //     const food = arrayOfOrderFood.find((food) => (food.id = id));
-    //     food.order = false;
-    //     setArrayOfOrderFood([...arrayOfOrderFood])
-    // };
+        axios
+            .delete(`http://localhost:3001/cart/${food.id}/`)
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const scrollUp = () => {
         window.scrollTo(0, 0);
     };
+
+    let initialValue = 0;
+    let totalPrice = arrayOfOrderFood.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.orderPrice,
+        initialValue
+    );
 
     const renderPurchase = () => {
         return arrayOfOrderFood.map((food: Food) => {
@@ -148,9 +105,9 @@ export default function Cart() {
                                         <Button
                                             variant='contained'
                                             color='secondary'
-                                            // onClick={() =>
-                                            //     handleDeleteFood(food.id)
-                                            // }
+                                            onClick={() =>
+                                                handleDeleteFood(food.id)
+                                            }
                                         >
                                             Delete
                                         </Button>
@@ -177,9 +134,10 @@ export default function Cart() {
 
             {renderPurchase()}
 
-            <Link className='cart-address' to='/address'>
-                Order
-            </Link>
+            {totalPrice === 0? null : <Link className='cart-address' to='/address'>
+                Order | Total price: {`${totalPrice} UAH`}
+            </Link>}
+            
 
             <img
                 src={Arrow}

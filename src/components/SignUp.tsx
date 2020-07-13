@@ -66,40 +66,6 @@ export default function SignUp() {
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
-        // if (name && email && password) {
-        //     const find = arrayOfUsers.find(
-        //         (user: User) => user.emailValue === email
-        //     );
-        //     if (find) {
-        //         setErrorUsedEmail('This email is already used');
-        //     } else {
-        //         const patternIsValid = validEmailRegex.test(email);
-        //         const emailLengthValid = email.length > 2;
-        //         const passwordLengthValid = password.length >= 6;
-        //         if (patternIsValid && emailLengthValid && passwordLengthValid) {
-        //             axios
-        //                 .post('http://localhost:3001/users', {
-        //                     nameValue: name,
-        //                     emailValue: email,
-        //                     passwordValue: password,
-        //                 })
-        //                 .then((res) => {
-        //                     console.log(res.data);
-        //                 })
-        //                 .catch((error) => {
-        //                     console.log(error);
-        //                 });
-
-        //             redirect.push('/signin');
-        //         }
-        //         if (!patternIsValid) setInvalidEmail('Invalid Email');
-        //         if (!passwordLengthValid)
-        //             setInvalidPassword('Password must be 6 characters long');
-        //     }
-        // } else {
-        //     setErrorEmptyInput('Maybe some inputs are empty');
-        // }
-
         const patternIsValid = validEmailRegex.test(email);
         const passwordLengthValid = password.length >= 6;
 
@@ -117,9 +83,6 @@ export default function SignUp() {
                             emailValue: email,
                             passwordValue: password,
                         })
-                        .then((res) => {
-                            console.log(res.data);
-                        })
                         .catch((error) => {
                             console.log(error);
                         });
@@ -129,9 +92,7 @@ export default function SignUp() {
                 if (!patternIsValid || !passwordLengthValid)
                     setInvalidPassword('Password or email is invalid');
             }
-        } else {
-            setErrorEmptyInput('Maybe some inputs are empty');
-        }
+        } else setErrorEmptyInput('All fields are required!');
     };
 
     return (

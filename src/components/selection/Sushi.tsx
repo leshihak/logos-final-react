@@ -25,6 +25,7 @@ interface SushiType {
     id: number;
     order: boolean;
     orderPrice: number;
+    orderText: string;
 }
 
 const useStyles = makeStyles({
@@ -48,16 +49,16 @@ const useStyles = makeStyles({
 export default function Sushi() {
     const classes = useStyles();
     const [arrayOfSushi, setArrayOfSushi] = useState<any[]>([]);
-    const [orderText, setOrderText] = useState<string>('');
 
     const incrementItem = (id: number) => {
         const sushi = arrayOfSushi.find((sushi) => sushi.id === id);
         if (sushi.count < 10) sushi.count++;
         setArrayOfSushi([...arrayOfSushi]);
 
-        sushi.count <= 1
-            ? (sushi.orderPrice = sushi.price)
-            : (sushi.orderPrice = sushi.count * sushi.price);
+        if (sushi.count === 0) {
+            sushi.orderText = '';
+            sushi.orderPrice = sushi.price;
+        } else sushi.orderPrice = sushi.count * sushi.price;
 
         axios
             .put(`http://localhost:3001/sushi/${id}/`, sushi)
@@ -71,9 +72,10 @@ export default function Sushi() {
         if (sushi.count) sushi.count--;
         setArrayOfSushi([...arrayOfSushi]);
 
-        sushi.count === 0
-            ? (sushi.orderPrice = sushi.price)
-            : (sushi.orderPrice = sushi.count * sushi.price);
+        if (sushi.count === 0) {
+            sushi.orderText = '';
+            sushi.orderPrice = sushi.price;
+        } else sushi.orderPrice = sushi.count * sushi.price;
 
         axios
             .put(`http://localhost:3001/sushi/${id}/`, sushi)
@@ -86,21 +88,13 @@ export default function Sushi() {
         const sushi = arrayOfSushi.find((sushi) => sushi.id === id);
         setArrayOfSushi([...arrayOfSushi]);
 
-        if (sushi.count === 0) {
-            setOrderText('');
-            sushi.order = false;
-        } else {
-            setOrderText(
-                `You order ${sushi.name} ${sushi.title}, amount of ${sushi.count} pieces, price: ${sushi.orderPrice} UAH.`
-            );
-            sushi.order = true;
-        }
+        sushi.count === 0
+            ? (sushi.orderText = '')
+            : (sushi.orderText = `You order ${sushi.name} ${sushi.title}, amount of ${sushi.count} pieces, price: ${sushi.orderPrice} UAH.`);
 
-        axios
-            .put(`http://localhost:3001/sushi/${id}/`, sushi)
-            .catch((error) => {
-                console.log(error);
-            });
+        axios.post('http://localhost:3001/cart', sushi).catch((error) => {
+            console.log(error);
+        });
     };
 
     useEffect(() => {
@@ -113,6 +107,31 @@ export default function Sushi() {
                 console.log(error);
             });
     }, []);
+
+    const filterCheapItems = () => {
+        const cheapFood = arrayOfSushi.sort((a, b) =>
+            a.price > b.price ? 1 : b.price > a.price ? -1 : 0
+        );
+        setArrayOfSushi([...cheapFood]);
+    };
+
+    const filterExpensiveItems = () => {
+        const expensiveFood = arrayOfSushi.sort((a, b) =>
+            a.price < b.price ? 1 : b.price < a.price ? -1 : 0
+        );
+        setArrayOfSushi([...expensiveFood]);
+    };
+
+    const resetFilter = () => {
+        axios
+            .get('http://localhost:3001/sushi')
+            .then((res) => {
+                setArrayOfSushi(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const scrollUp = () => {
         window.scrollTo(0, 0);
@@ -187,7 +206,7 @@ export default function Sushi() {
                                 </CardActions>
                                 <br />
                                 <Typography variant='body2' component='p'>
-                                    {orderText}
+                                    {sushi.orderText}
                                 </Typography>
                             </Card>
                         </div>
@@ -216,6 +235,31 @@ export default function Sushi() {
                 <Link to='/wine' className='choose-food-link'>
                     {'Wine'}
                 </Link>
+            </div>
+
+            <div className='filter-block'>
+                <h2>Filter: </h2>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterCheapItems}
+                >
+                    Cheaper
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterExpensiveItems}
+                >
+                    More expensive
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='secondary'
+                    onClick={resetFilter}
+                >
+                    Reset
+                </Button>
             </div>
 
             {renderSushi()}

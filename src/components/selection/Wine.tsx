@@ -25,6 +25,7 @@ interface WineType {
     id: number;
     order: boolean;
     orderPrice: number;
+    orderText: string;
 }
 
 const useStyles = makeStyles({
@@ -48,16 +49,16 @@ const useStyles = makeStyles({
 export default function Wine() {
     const classes = useStyles();
     const [arrayOfWine, setArrayOfWine] = useState<any[]>([]);
-    const [orderText, setOrderText] = useState<string>('');
 
     const incrementItem = (id: number) => {
         const wine = arrayOfWine.find((wine) => wine.id === id);
         if (wine.count < 10) wine.count++;
         setArrayOfWine([...arrayOfWine]);
 
-        wine.count <= 1
-            ? (wine.orderPrice = wine.price)
-            : (wine.orderPrice = wine.count * wine.price);
+        if (wine.count === 0) {
+            wine.orderText = '';
+            wine.orderPrice = wine.price;
+        } else wine.orderPrice = wine.count * wine.price;
 
         axios.put(`http://localhost:3001/wine/${id}/`, wine).catch((error) => {
             console.log(error);
@@ -69,9 +70,10 @@ export default function Wine() {
         if (wine.count) wine.count--;
         setArrayOfWine([...arrayOfWine]);
 
-        wine.count <= 1
-            ? (wine.orderPrice = wine.price)
-            : (wine.orderPrice = wine.count * wine.price);
+        if (wine.count === 0) {
+            wine.orderText = '';
+            wine.orderPrice = wine.price;
+        } else wine.orderPrice = wine.count * wine.price;
 
         axios.put(`http://localhost:3001/wine/${id}/`, wine).catch((error) => {
             console.log(error);
@@ -82,17 +84,11 @@ export default function Wine() {
         const wine = arrayOfWine.find((wine) => wine.id === id);
         setArrayOfWine([...arrayOfWine]);
 
-        if (wine.count === 0) {
-            setOrderText('');
-            wine.order = false;
-        } else {
-            setOrderText(
-                `You order ${wine.name} ${wine.title}, amount of ${wine.count} pieces, price: ${wine.orderPrice} UAH.`
-            );
-            wine.order = true;
-        }
+        wine.count === 0
+            ? (wine.orderText = '')
+            : (wine.orderText = `You order ${wine.name} ${wine.title}, amount of ${wine.count} pieces, price: ${wine.orderPrice} UAH.`);
 
-        axios.put(`http://localhost:3001/wine/${id}/`, wine).catch((error) => {
+        axios.post('http://localhost:3001/cart', wine).catch((error) => {
             console.log(error);
         });
     };
@@ -107,6 +103,31 @@ export default function Wine() {
                 console.log(error);
             });
     }, []);
+
+    const filterCheapItems = () => {
+        const cheapFood = arrayOfWine.sort((a, b) =>
+            a.price > b.price ? 1 : b.price > a.price ? -1 : 0
+        );
+        setArrayOfWine([...cheapFood]);
+    };
+
+    const filterExpensiveItems = () => {
+        const expensiveFood = arrayOfWine.sort((a, b) =>
+            a.price < b.price ? 1 : b.price < a.price ? -1 : 0
+        );
+        setArrayOfWine([...expensiveFood]);
+    };
+
+    const resetFilter = () => {
+        axios
+            .get('http://localhost:3001/wine')
+            .then((res) => {
+                setArrayOfWine(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const scrollUp = () => {
         window.scrollTo(0, 0);
@@ -179,7 +200,7 @@ export default function Wine() {
                                 </CardActions>
                                 <br />
                                 <Typography variant='body2' component='p'>
-                                    {orderText}
+                                    {wine.orderText}
                                 </Typography>
                             </Card>
                         </div>
@@ -208,6 +229,31 @@ export default function Wine() {
                 <Link to='/sushi' className='choose-food-link'>
                     {'Sushi'}
                 </Link>
+            </div>
+
+            <div className='filter-block'>
+                <h2>Filter: </h2>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterCheapItems}
+                >
+                    Cheaper
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterExpensiveItems}
+                >
+                    More expensive
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='secondary'
+                    onClick={resetFilter}
+                >
+                    Reset
+                </Button>
             </div>
 
             {renderWine()}

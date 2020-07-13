@@ -24,6 +24,7 @@ interface BurgerType {
     id: number;
     order: boolean;
     orderPrice: number;
+    orderText: string;
 }
 
 const useStyles = makeStyles({
@@ -47,16 +48,16 @@ const useStyles = makeStyles({
 export default function Burgers() {
     const classes = useStyles();
     const [arrayOfBurgers, setArrayOfBurgers] = useState<any[]>([]);
-    const [orderText, setOrderText] = useState<string>('');
 
     const incrementItem = (id: number) => {
         const burger = arrayOfBurgers.find((burger) => burger.id === id);
         if (burger.count < 10) burger.count++;
         setArrayOfBurgers([...arrayOfBurgers]);
 
-        burger.count <= 1
-            ? (burger.orderPrice = burger.price)
-            : (burger.orderPrice = burger.count * burger.price);
+        if (burger.count === 0) {
+            burger.orderText = '';
+            burger.orderPrice = burger.price;
+        } else burger.orderPrice = burger.count * burger.price;
 
         axios
             .put(`http://localhost:3001/burgers/${id}/`, burger)
@@ -70,9 +71,10 @@ export default function Burgers() {
         if (burger.count) burger.count--;
         setArrayOfBurgers([...arrayOfBurgers]);
 
-        burger.count <= 1
-            ? (burger.orderPrice = burger.price)
-            : (burger.orderPrice = burger.count * burger.price);
+        if (burger.count === 0) {
+            burger.orderText = '';
+            burger.orderPrice = burger.price;
+        } else burger.orderPrice = burger.count * burger.price;
 
         axios
             .put(`http://localhost:3001/burgers/${id}/`, burger)
@@ -85,30 +87,13 @@ export default function Burgers() {
         const burger = arrayOfBurgers.find((burger) => burger.id === id);
         setArrayOfBurgers([...arrayOfBurgers]);
 
-        if (burger.count === 0) {
-            setOrderText('');
-            burger.order = false;
-        } else {
-            setOrderText(
-                `You order ${burger.name} ${burger.title}, amount of ${burger.count} pieces, price: ${burger.orderPrice} UAH.`
-            );
-            burger.order = true;
-        }
+        burger.count === 0
+            ? (burger.orderText = '')
+            : (burger.orderText = `You order ${burger.name} ${burger.title}, amount of ${burger.count} pieces, price: ${burger.orderPrice} UAH.`);
 
-        axios
-            .put(`http://localhost:3001/burgers/${id}/`, burger)
-            .catch((error) => {
-                console.log(error);
-            });
-
-        // axios
-        //     .post('http://localhost:3001/cart', arrayOfBurgers)
-        //     .then((res) => {
-        //         console.log(res.data);
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+        axios.post('http://localhost:3001/cart', burger).catch((error) => {
+            console.log(error);
+        });
     };
 
     useEffect(() => {
@@ -121,6 +106,31 @@ export default function Burgers() {
                 console.log(error);
             });
     }, []);
+
+    const filterCheapItems = () => {
+        const cheapFood = arrayOfBurgers.sort((a, b) =>
+            a.price > b.price ? 1 : b.price > a.price ? -1 : 0
+        );
+        setArrayOfBurgers([...cheapFood]);
+    };
+
+    const filterExpensiveItems = () => {
+        const expensiveFood = arrayOfBurgers.sort((a, b) =>
+            a.price < b.price ? 1 : b.price < a.price ? -1 : 0
+        );
+        setArrayOfBurgers([...expensiveFood]);
+    };
+
+    const resetFilter = () => {
+        axios
+            .get('http://localhost:3001/burgers')
+            .then((res) => {
+                setArrayOfBurgers(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const scrollUp = () => {
         window.scrollTo(0, 0);
@@ -195,7 +205,7 @@ export default function Burgers() {
                                 </CardActions>
                                 <br />
                                 <Typography variant='body2' component='p'>
-                                    {orderText}
+                                    {burger.orderText}
                                 </Typography>
                             </Card>
                         </>
@@ -224,6 +234,31 @@ export default function Burgers() {
                 <Link to='/wine' className='choose-food-link'>
                     {'Wine'}
                 </Link>
+            </div>
+
+            <div className='filter-block'>
+                <h2>Filter: </h2>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterCheapItems}
+                >
+                    Cheaper
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='primary'
+                    onClick={filterExpensiveItems}
+                >
+                    More expensive
+                </Button>
+                <Button
+                    variant='outlined'
+                    color='secondary'
+                    onClick={resetFilter}
+                >
+                    Reset
+                </Button>
             </div>
 
             {renderBurger()}

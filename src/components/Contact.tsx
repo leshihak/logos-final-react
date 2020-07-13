@@ -9,8 +9,10 @@ import {
     Button,
     List,
     ListItem,
+    TextField,
 } from '@material-ui/core';
 import SimpleMap from './SimpleMap';
+import Arrow from '../images/up-arrow.svg';
 
 const useStyles = makeStyles({
     list: {
@@ -72,6 +74,11 @@ export default function Contact() {
             </List>
         </div>
     );
+
+    const scrollUp = () => {
+        window.scrollTo(0, 0);
+    };
+
     return (
         <>
             <div className='getStartedHeader'>
@@ -96,9 +103,60 @@ export default function Contact() {
                 </div>
             </div>
 
-            <h1 className='chooseFoodPage-title'>Contact</h1>
+            <div className='contactWithMe'>
+                <h1 className='chooseFoodPage-title'>Contact</h1>
 
-            <SimpleMap />
+                <div className='contactBlock'>
+                    <img
+                        className='contactImg'
+                        src='https://scontent.flwo1-1.fna.fbcdn.net/v/t1.0-9/96283723_1068310243566363_840147391813255168_o.jpg?_nc_cat=101&_nc_sid=09cbfe&_nc_ohc=k5k4zAbUngUAX82KVeq&_nc_ht=scontent.flwo1-1.fna&oh=49d980a6217f25b7453200b14a5ff031&oe=5F330BEE'
+                        alt='me'
+                    />
+                    <div className='contact-fields'>
+                        <TextField
+                            id='filled-textarea'
+                            label='My Name'
+                            value='Nataliia'
+                            multiline
+                            variant='filled'
+                            disabled
+                        />
+                        <TextField
+                            id='filled-textarea'
+                            label='My Phone'
+                            value='+380 95 336 18 89'
+                            multiline
+                            variant='filled'
+                            disabled
+                        />
+                        <TextField
+                            id='filled-textarea'
+                            label='My Email'
+                            value='nat.leshchak@gmail.com'
+                            multiline
+                            variant='filled'
+                            disabled
+                        />
+                        <TextField
+                            id='filled-textarea'
+                            label='My City'
+                            value='Lviv, Ukraine'
+                            multiline
+                            variant='filled'
+                            disabled
+                        />
+                    </div>
+                </div>
+
+                <SimpleMap />
+            </div>
+
+            <img
+                src={Arrow}
+                alt='arrow'
+                className='arrow-up'
+                onClick={scrollUp}
+            />
         </>
     );
 }

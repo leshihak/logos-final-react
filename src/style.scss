@@ -237,6 +237,19 @@ h3 {
     }
 }
 
+.filter-block {
+    height: 40px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.MuiButton-outlinedPrimary,
+.MuiButton-outlinedSecondary {
+    margin-left: 20px !important;
+}
+
 // cart
 
 .cartFood {
@@ -269,10 +282,44 @@ h3 {
     background-color: rgba(235, 4, 85, 0.781);
 }
 
+// contact
+
+.contactWithMe {
+    background-color: rgb(179, 212, 252);
+}
+
+.contactBlock {
+    display: flex;
+}
+
+.contact-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.MuiFilledInput-root.Mui-disabled {
+    background-color: rgb(179, 212, 252) !important;
+}
+
+.contactImg {
+    max-width: 500px;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
 // media
 
 @media screen and (max-width: 680px) {
     .fade-selection {
+        flex-direction: column;
+        height: unset;
+    }
+
+    .contactBlock {
+        align-items: center;
         flex-direction: column;
     }
 }
