@@ -6,7 +6,6 @@ import Arrow from '../../images/up-arrow.svg';
 import { Fade } from 'react-awesome-reveal';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {
-    ButtonGroup,
     Card,
     makeStyles,
     CardActions,
@@ -25,6 +24,8 @@ interface PizzaType {
     img: string;
     delay: number;
     id: number;
+    order: boolean;
+    orderPrice: number;
 }
 
 const useStyles = makeStyles({
@@ -47,15 +48,60 @@ const useStyles = makeStyles({
 
 export default function Pizza() {
     const classes = useStyles();
-    const [arrayOfPizzas, setArrayOfPizzas] = useState([]);
-    let [clicks, setClicks] = useState<number>(0);
+    const [arrayOfPizzas, setArrayOfPizzas] = useState<any[]>([]);
+    const [orderText, setOrderText] = useState<string>('');
 
-    const incrementItem = () => {
-        if (clicks < 10) setClicks((clicks += 1));
+    const incrementItem = (id: number) => {
+        const pizza = arrayOfPizzas.find((pizza) => pizza.id === id);
+        if (pizza.count < 10) pizza.count++;
+        setArrayOfPizzas([...arrayOfPizzas]);
+
+        pizza.count <= 1
+            ? (pizza.orderPrice = pizza.price)
+            : (pizza.orderPrice = pizza.count * pizza.price);
+
+        axios
+            .put(`http://localhost:3001/pizzas/${id}/`, pizza)
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
-    const decreaseItem = () => {
-        if (clicks) setClicks((clicks -= 1));
+    const decreaseItem = (id: number) => {
+        const pizza = arrayOfPizzas.find((pizza) => pizza.id === id);
+        if (pizza.count) pizza.count--;
+        setArrayOfPizzas([...arrayOfPizzas]);
+
+        pizza.count === 0
+            ? (pizza.orderPrice = pizza.price)
+            : (pizza.orderPrice = pizza.count * pizza.price);
+
+        axios
+            .put(`http://localhost:3001/pizzas/${id}/`, pizza)
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const handleOrderItem = (id: number) => {
+        const pizza = arrayOfPizzas.find((pizza) => pizza.id === id);
+        setArrayOfPizzas([...arrayOfPizzas]);
+
+        if (pizza.count === 0) {
+            setOrderText('');
+            pizza.order = false;
+        } else {
+            setOrderText(
+                `You order ${pizza.name} ${pizza.title}, amount of ${pizza.count} pieces, price: ${pizza.orderPrice} UAH.`
+            );
+            pizza.order = true;
+        }
+
+        axios
+            .put(`http://localhost:3001/pizzas/${id}/`, pizza)
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     useEffect(() => {
@@ -67,7 +113,7 @@ export default function Pizza() {
             .catch((error) => {
                 console.log(error);
             });
-    });
+    }, []);
 
     const scrollUp = () => {
         window.scrollTo(0, 0);
@@ -103,34 +149,49 @@ export default function Pizza() {
                                         {pizza.ingredients}
                                     </Typography>
                                     <Typography variant='body2' component='p'>
-                                        {pizza.price} UAH
+                                        {pizza.orderPrice} UAH
                                         <br />
                                         {pizza.size}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <ButtonGroup
-                                        disableElevation
-                                        variant='contained'
-                                        color='secondary'
-                                    >
-                                        <Button onClick={decreaseItem}>
+                                    <div className='button-group'>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                decreaseItem(pizza.id)
+                                            }
+                                        >
                                             -
                                         </Button>
-                                        <span className='count'>
+                                        <div className='count'>
                                             {pizza.count}
-                                        </span>
-                                        <Button onClick={incrementItem}>
+                                        </div>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                incrementItem(pizza.id)
+                                            }
+                                        >
                                             +
                                         </Button>
-                                    </ButtonGroup>
+                                    </div>
                                     <Button
                                         variant='contained'
                                         color='secondary'
+                                        onClick={() =>
+                                            handleOrderItem(pizza.id)
+                                        }
                                     >
                                         Order
                                     </Button>
                                 </CardActions>
+                                <br />
+                                <Typography variant='body2' component='p'>
+                                    {orderText}
+                                </Typography>
                             </Card>
                         </div>
                     </Fade>

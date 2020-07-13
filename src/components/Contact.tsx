@@ -10,6 +10,7 @@ import {
     List,
     ListItem,
 } from '@material-ui/core';
+import SimpleMap from './SimpleMap';
 
 const useStyles = makeStyles({
     list: {
@@ -96,6 +97,8 @@ export default function Contact() {
             </div>
 
             <h1 className='chooseFoodPage-title'>Contact</h1>
+
+            <SimpleMap />
         </>
     );
 }

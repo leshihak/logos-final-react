@@ -47,7 +47,6 @@ export default function SignUp() {
     const [password, setPassword] = useState('');
     const [errorUsedEmail, setErrorUsedEmail] = useState('');
     const [errorEmptyInput, setErrorEmptyInput] = useState('');
-    const [invalidEmail, setInvalidEmail] = useState('');
     const [invalidPassword, setInvalidPassword] = useState('');
     const [arrayOfUsers, setArrayOfUsers] = useState([]);
 
@@ -67,67 +66,68 @@ export default function SignUp() {
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 
-        // ?????
+        // if (name && email && password) {
+        //     const find = arrayOfUsers.find(
+        //         (user: User) => user.emailValue === email
+        //     );
+        //     if (find) {
+        //         setErrorUsedEmail('This email is already used');
+        //     } else {
+        //         const patternIsValid = validEmailRegex.test(email);
+        //         const emailLengthValid = email.length > 2;
+        //         const passwordLengthValid = password.length >= 6;
+        //         if (patternIsValid && emailLengthValid && passwordLengthValid) {
+        //             axios
+        //                 .post('http://localhost:3001/users', {
+        //                     nameValue: name,
+        //                     emailValue: email,
+        //                     passwordValue: password,
+        //                 })
+        //                 .then((res) => {
+        //                     console.log(res.data);
+        //                 })
+        //                 .catch((error) => {
+        //                     console.log(error);
+        //                 });
 
-        // if (email.length <= 2) validEmailRegex.test(email);
-        // else setInvalidEmail('Invalid Email');
+        //             redirect.push('/signin');
+        //         }
+        //         if (!patternIsValid) setInvalidEmail('Invalid Email');
+        //         if (!passwordLengthValid)
+        //             setInvalidPassword('Password must be 6 characters long');
+        //     }
+        // } else {
+        //     setErrorEmptyInput('Maybe some inputs are empty');
+        // }
 
-        // if (password.length < 6)
-        //     setInvalidPassword('Password must be 6 characters long');
-        // else setInvalidPassword('');
-
-        // ?????
+        const patternIsValid = validEmailRegex.test(email);
+        const passwordLengthValid = password.length >= 6;
 
         if (name && email && password) {
             const find = arrayOfUsers.find(
                 (user: User) => user.emailValue === email
             );
-            if (find !== undefined) {
+            if (find) {
                 setErrorUsedEmail('This email is already used');
             } else {
-                // if (email) validEmailRegex.test(email);
-                // else if (email.length <= 2) setInvalidEmail('Invalid Email');
-                // else if (password.length <= 6)
-                //     setInvalidPassword('Password must be 6 characters long');
-                // else if (password.length >= 6) setInvalidPassword('');
-                // else {
-                //     axios
-                //         .post('http://localhost:3001/users', {
-                //             nameValue: name,
-                //             emailValue: email,
-                //             passwordValue: password,
-                //         })
-                //         .then((res) => {
-                //             console.log(res.data);
-                //         })
-                //         .catch((error) => {
-                //             console.log(error);
-                //         });
+                if (patternIsValid && passwordLengthValid) {
+                    axios
+                        .post('http://localhost:3001/users', {
+                            nameValue: name,
+                            emailValue: email,
+                            passwordValue: password,
+                        })
+                        .then((res) => {
+                            console.log(res.data);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
 
-                //     redirect.push('/signin');
-                // }
-
-                // if (email.length <= 2) validEmailRegex.test(email);
-                // else setInvalidEmail('Invalid Email');
-
-                // if (password.length < 6)
-                //     setInvalidPassword('Password must be 6 characters long');
-                // else setInvalidPassword('');
-
-                axios
-                    .post('http://localhost:3001/users', {
-                        nameValue: name,
-                        emailValue: email,
-                        passwordValue: password,
-                    })
-                    .then((res) => {
-                        console.log(res.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-
-                redirect.push('/signin');
+                    redirect.push('/signin');
+                }
+                if (!patternIsValid || !passwordLengthValid)
+                    setInvalidPassword('Password or email is invalid');
             }
         } else {
             setErrorEmptyInput('Maybe some inputs are empty');
@@ -191,8 +191,6 @@ export default function SignUp() {
                                     ) => setEmail(event.target.value)}
                                 />
                                 {errorUsedEmail}
-                                <br />
-                                {invalidEmail}
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField

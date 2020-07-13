@@ -6,7 +6,6 @@ import Arrow from '../../images/up-arrow.svg';
 import { Fade } from 'react-awesome-reveal';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {
-    ButtonGroup,
     Card,
     makeStyles,
     CardActions,
@@ -24,6 +23,8 @@ interface SushiType {
     img: string;
     delay: number;
     id: number;
+    order: boolean;
+    orderPrice: number;
 }
 
 const useStyles = makeStyles({
@@ -46,15 +47,60 @@ const useStyles = makeStyles({
 
 export default function Sushi() {
     const classes = useStyles();
-    const [arrayOfSushi, setArrayOfSushi] = useState([]);
-    let [clicks, setClicks] = useState<number>(0);
+    const [arrayOfSushi, setArrayOfSushi] = useState<any[]>([]);
+    const [orderText, setOrderText] = useState<string>('');
 
-    const incrementItem = () => {
-        if (clicks < 10) setClicks((clicks += 1));
+    const incrementItem = (id: number) => {
+        const sushi = arrayOfSushi.find((sushi) => sushi.id === id);
+        if (sushi.count < 10) sushi.count++;
+        setArrayOfSushi([...arrayOfSushi]);
+
+        sushi.count <= 1
+            ? (sushi.orderPrice = sushi.price)
+            : (sushi.orderPrice = sushi.count * sushi.price);
+
+        axios
+            .put(`http://localhost:3001/sushi/${id}/`, sushi)
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
-    const decreaseItem = () => {
-        if (clicks) setClicks((clicks -= 1));
+    const decreaseItem = (id: number) => {
+        const sushi = arrayOfSushi.find((sushi) => sushi.id === id);
+        if (sushi.count) sushi.count--;
+        setArrayOfSushi([...arrayOfSushi]);
+
+        sushi.count === 0
+            ? (sushi.orderPrice = sushi.price)
+            : (sushi.orderPrice = sushi.count * sushi.price);
+
+        axios
+            .put(`http://localhost:3001/sushi/${id}/`, sushi)
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const handleOrderItem = (id: number) => {
+        const sushi = arrayOfSushi.find((sushi) => sushi.id === id);
+        setArrayOfSushi([...arrayOfSushi]);
+
+        if (sushi.count === 0) {
+            setOrderText('');
+            sushi.order = false;
+        } else {
+            setOrderText(
+                `You order ${sushi.name} ${sushi.title}, amount of ${sushi.count} pieces, price: ${sushi.orderPrice} UAH.`
+            );
+            sushi.order = true;
+        }
+
+        axios
+            .put(`http://localhost:3001/sushi/${id}/`, sushi)
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     useEffect(() => {
@@ -102,32 +148,47 @@ export default function Sushi() {
                                         {sushi.ingredients}
                                     </Typography>
                                     <Typography variant='body2' component='p'>
-                                        {sushi.price} UAH
+                                        {sushi.orderPrice} UAH
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <ButtonGroup
-                                        disableElevation
-                                        variant='contained'
-                                        color='secondary'
-                                    >
-                                        <Button onClick={decreaseItem}>
+                                    <div className='button-group'>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                decreaseItem(sushi.id)
+                                            }
+                                        >
                                             -
                                         </Button>
-                                        <span className='count'>
+                                        <div className='count'>
                                             {sushi.count}
-                                        </span>
-                                        <Button onClick={incrementItem}>
+                                        </div>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                incrementItem(sushi.id)
+                                            }
+                                        >
                                             +
                                         </Button>
-                                    </ButtonGroup>
+                                    </div>
                                     <Button
                                         variant='contained'
                                         color='secondary'
+                                        onClick={() =>
+                                            handleOrderItem(sushi.id)
+                                        }
                                     >
                                         Order
                                     </Button>
                                 </CardActions>
+                                <br />
+                                <Typography variant='body2' component='p'>
+                                    {orderText}
+                                </Typography>
                             </Card>
                         </div>
                     </Fade>

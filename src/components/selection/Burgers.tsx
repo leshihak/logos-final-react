@@ -6,7 +6,6 @@ import Arrow from '../../images/up-arrow.svg';
 import { Fade } from 'react-awesome-reveal';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {
-    ButtonGroup,
     Card,
     makeStyles,
     CardActions,
@@ -14,7 +13,6 @@ import {
     Button,
     Typography,
 } from '@material-ui/core';
-
 interface BurgerType {
     name: string;
     title: string;
@@ -24,6 +22,8 @@ interface BurgerType {
     img: string;
     delay: number;
     id: number;
+    order: boolean;
+    orderPrice: number;
 }
 
 const useStyles = makeStyles({
@@ -46,15 +46,69 @@ const useStyles = makeStyles({
 
 export default function Burgers() {
     const classes = useStyles();
-    const [arrayOfBurgers, setArrayOfBurgers] = useState([]);
-    let [clicks, setClicks] = useState<number>(0);
+    const [arrayOfBurgers, setArrayOfBurgers] = useState<any[]>([]);
+    const [orderText, setOrderText] = useState<string>('');
 
-    const incrementItem = () => {
-        if (clicks < 10) setClicks((clicks += 1));
+    const incrementItem = (id: number) => {
+        const burger = arrayOfBurgers.find((burger) => burger.id === id);
+        if (burger.count < 10) burger.count++;
+        setArrayOfBurgers([...arrayOfBurgers]);
+
+        burger.count <= 1
+            ? (burger.orderPrice = burger.price)
+            : (burger.orderPrice = burger.count * burger.price);
+
+        axios
+            .put(`http://localhost:3001/burgers/${id}/`, burger)
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
-    const decreaseItem = () => {
-        if (clicks) setClicks((clicks -= 1));
+    const decreaseItem = (id: number) => {
+        const burger = arrayOfBurgers.find((burger) => burger.id === id);
+        if (burger.count) burger.count--;
+        setArrayOfBurgers([...arrayOfBurgers]);
+
+        burger.count <= 1
+            ? (burger.orderPrice = burger.price)
+            : (burger.orderPrice = burger.count * burger.price);
+
+        axios
+            .put(`http://localhost:3001/burgers/${id}/`, burger)
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const handleOrderItem = (id: number) => {
+        const burger = arrayOfBurgers.find((burger) => burger.id === id);
+        setArrayOfBurgers([...arrayOfBurgers]);
+
+        if (burger.count === 0) {
+            setOrderText('');
+            burger.order = false;
+        } else {
+            setOrderText(
+                `You order ${burger.name} ${burger.title}, amount of ${burger.count} pieces, price: ${burger.orderPrice} UAH.`
+            );
+            burger.order = true;
+        }
+
+        axios
+            .put(`http://localhost:3001/burgers/${id}/`, burger)
+            .catch((error) => {
+                console.log(error);
+            });
+
+        // axios
+        //     .post('http://localhost:3001/cart', arrayOfBurgers)
+        //     .then((res) => {
+        //         console.log(res.data);
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
     };
 
     useEffect(() => {
@@ -80,9 +134,9 @@ export default function Burgers() {
                         <img
                             src={burger.img}
                             alt='Burger'
-                            className='pizza-selection'
+                            className='selection-img'
                         />
-                        <div>
+                        <>
                             <Card className={classes.root} variant='outlined'>
                                 <CardContent>
                                     <Typography
@@ -102,34 +156,49 @@ export default function Burgers() {
                                         {burger.ingredients}
                                     </Typography>
                                     <Typography variant='body2' component='p'>
-                                        {burger.price} UAH
+                                        {burger.orderPrice} UAH
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <ButtonGroup
-                                        disableElevation
-                                        variant='contained'
-                                        color='secondary'
-                                    >
-                                        <Button onClick={decreaseItem}>
+                                    <div className='button-group'>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                decreaseItem(burger.id)
+                                            }
+                                        >
                                             -
                                         </Button>
-                                        <span className='count'>
+                                        <div className='count'>
                                             {burger.count}
-                                        </span>
-                                        <Button onClick={incrementItem}>
+                                        </div>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                incrementItem(burger.id)
+                                            }
+                                        >
                                             +
                                         </Button>
-                                    </ButtonGroup>
+                                    </div>
                                     <Button
                                         variant='contained'
                                         color='secondary'
+                                        onClick={() =>
+                                            handleOrderItem(burger.id)
+                                        }
                                     >
                                         Order
                                     </Button>
                                 </CardActions>
+                                <br />
+                                <Typography variant='body2' component='p'>
+                                    {orderText}
+                                </Typography>
                             </Card>
-                        </div>
+                        </>
                     </Fade>
                 </div>
             );

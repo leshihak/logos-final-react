@@ -9,7 +9,6 @@ import { Fade } from 'react-awesome-reveal';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
-// import { v4 as uuidv4 } from 'uuid';
 import {
     makeStyles,
     SwipeableDrawer,
@@ -117,7 +116,7 @@ export default function ChooseFoodPage() {
                         {'Choose Pizza'}
                     </Link>
                 </Fade>
-                <Fade delay={1000} className='fade'>
+                <Fade delay={500} className='fade'>
                     <p>...or Sushi...</p>
                     <img
                         src={Sushi}
@@ -128,7 +127,7 @@ export default function ChooseFoodPage() {
                         {'Choose Sushi'}
                     </Link>
                 </Fade>
-                <Fade delay={2000} className='fade'>
+                <Fade delay={1000} className='fade'>
                     <p>...or may be some Burgers?</p>
                     <img
                         src={Burgers}
@@ -139,14 +138,14 @@ export default function ChooseFoodPage() {
                         {'Choose Burgers'}
                     </Link>
                 </Fade>
-                <Fade delay={3000} className='fade'>
+                <Fade delay={1500} className='fade'>
                     <p>...and finally Wine!</p>
                     <img src={Wine} alt='Wine' className='chooseFoodPage-img' />
                     <Link to='/wine' className='chooseFoodLink'>
                         {'Choose Wine'}
                     </Link>
                 </Fade>
-                <Fade delay={4000}>
+                <Fade delay={2000}>
                     <h2 className='chooseFoodPage-title'>
                         So what will you choose?
                     </h2>

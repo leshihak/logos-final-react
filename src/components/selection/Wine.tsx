@@ -6,7 +6,6 @@ import Arrow from '../../images/up-arrow.svg';
 import { Fade } from 'react-awesome-reveal';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {
-    ButtonGroup,
     Card,
     makeStyles,
     CardActions,
@@ -24,6 +23,8 @@ interface WineType {
     img: string;
     delay: number;
     id: number;
+    order: boolean;
+    orderPrice: number;
 }
 
 const useStyles = makeStyles({
@@ -46,15 +47,54 @@ const useStyles = makeStyles({
 
 export default function Wine() {
     const classes = useStyles();
-    const [arrayOfWine, setArrayOfWine] = useState([]);
-    let [clicks, setClicks] = useState<number>(0);
+    const [arrayOfWine, setArrayOfWine] = useState<any[]>([]);
+    const [orderText, setOrderText] = useState<string>('');
 
-    const incrementItem = () => {
-        if (clicks < 10) setClicks((clicks += 1));
+    const incrementItem = (id: number) => {
+        const wine = arrayOfWine.find((wine) => wine.id === id);
+        if (wine.count < 10) wine.count++;
+        setArrayOfWine([...arrayOfWine]);
+
+        wine.count <= 1
+            ? (wine.orderPrice = wine.price)
+            : (wine.orderPrice = wine.count * wine.price);
+
+        axios.put(`http://localhost:3001/wine/${id}/`, wine).catch((error) => {
+            console.log(error);
+        });
     };
 
-    const decreaseItem = () => {
-        if (clicks) setClicks((clicks -= 1));
+    const decreaseItem = (id: number) => {
+        const wine = arrayOfWine.find((wine) => wine.id === id);
+        if (wine.count) wine.count--;
+        setArrayOfWine([...arrayOfWine]);
+
+        wine.count <= 1
+            ? (wine.orderPrice = wine.price)
+            : (wine.orderPrice = wine.count * wine.price);
+
+        axios.put(`http://localhost:3001/wine/${id}/`, wine).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    const handleOrderItem = (id: number) => {
+        const wine = arrayOfWine.find((wine) => wine.id === id);
+        setArrayOfWine([...arrayOfWine]);
+
+        if (wine.count === 0) {
+            setOrderText('');
+            wine.order = false;
+        } else {
+            setOrderText(
+                `You order ${wine.name} ${wine.title}, amount of ${wine.count} pieces, price: ${wine.orderPrice} UAH.`
+            );
+            wine.order = true;
+        }
+
+        axios.put(`http://localhost:3001/wine/${id}/`, wine).catch((error) => {
+            console.log(error);
+        });
     };
 
     useEffect(() => {
@@ -102,32 +142,45 @@ export default function Wine() {
                                         {wine.ingredients}
                                     </Typography>
                                     <Typography variant='body2' component='p'>
-                                        {wine.price} UAH
+                                        {wine.orderPrice} UAH
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <ButtonGroup
-                                        disableElevation
-                                        variant='contained'
-                                        color='secondary'
-                                    >
-                                        <Button onClick={decreaseItem}>
+                                    <div className='button-group'>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                decreaseItem(wine.id)
+                                            }
+                                        >
                                             -
                                         </Button>
-                                        <span className='count'>
+                                        <div className='count'>
                                             {wine.count}
-                                        </span>
-                                        <Button onClick={incrementItem}>
+                                        </div>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            onClick={() =>
+                                                incrementItem(wine.id)
+                                            }
+                                        >
                                             +
                                         </Button>
-                                    </ButtonGroup>
+                                    </div>
                                     <Button
                                         variant='contained'
                                         color='secondary'
+                                        onClick={() => handleOrderItem(wine.id)}
                                     >
                                         Order
                                     </Button>
                                 </CardActions>
+                                <br />
+                                <Typography variant='body2' component='p'>
+                                    {orderText}
+                                </Typography>
                             </Card>
                         </div>
                     </Fade>
