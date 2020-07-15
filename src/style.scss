@@ -268,9 +268,14 @@ h3 {
 
 .cart-address {
     @extend .userCartBlock, .getStartedHeaderLink;
+    z-index: 1;
 }
 
 // address
+
+.address {
+    height: 100vh;
+}
 
 .makeStyles-paper-1 {
     margin-top: 0 !important;
@@ -280,6 +285,12 @@ h3 {
     width: 20px;
     height: 20px;
     background-color: rgba(235, 4, 85, 0.781);
+}
+
+.addressLinks {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 // contact

@@ -84,13 +84,14 @@ export default function Wine() {
         const wine = arrayOfWine.find((wine) => wine.id === id);
         setArrayOfWine([...arrayOfWine]);
 
-        wine.count === 0
-            ? (wine.orderText = '')
-            : (wine.orderText = `You order ${wine.name} ${wine.title}, amount of ${wine.count} pieces, price: ${wine.orderPrice} UAH.`);
+        if (wine.count === 0) wine.orderText = '';
+        else {
+            wine.orderText = `You order ${wine.name} ${wine.title}, amount of ${wine.count} pieces, price: ${wine.orderPrice} UAH.`;
 
-        axios.post('http://localhost:3001/cart', wine).catch((error) => {
-            console.log(error);
-        });
+            axios.post('http://localhost:3001/cart', wine).catch((error) => {
+                console.log(error);
+            });
+        }
     };
 
     useEffect(() => {

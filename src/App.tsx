@@ -12,7 +12,6 @@ import Burgers from './components/selection/Burgers';
 import Sushi from './components/selection/Sushi';
 import Pizza from './components/selection/Pizza';
 import Cart from './components/purchase/Cart';
-import Address from './components/purchase/Address';
 
 const App = () => {
     return (
@@ -29,7 +28,6 @@ const App = () => {
                 <Route path='/sushi' component={Sushi} />
                 <Route path='/pizza' component={Pizza} />
                 <Route path='/cart' component={Cart} />
-                <Route path='/address' component={Address} />
                 <Route path='' component={Page404} />
                 <Route path='*' component={Page404} />
                 <Route component={Page404} />

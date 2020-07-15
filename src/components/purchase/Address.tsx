@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     CssBaseline,
@@ -9,9 +9,7 @@ import {
     Container,
 } from '@material-ui/core';
 import axios from 'axios';
-import Logo from '../../logo.png';
 import Arrow from '../../images/up-arrow.svg';
-import { Link} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -33,15 +31,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignUp() {
+interface Props {
+    arrayOfOrderFood: any[];
+    deleteAllItemsAfterSubmit: () => void;
+    setShowModal: any;
+}
+
+export default function Address({
+    arrayOfOrderFood,
+    deleteAllItemsAfterSubmit,
+    setShowModal,
+}: Props) {
     const classes = useStyles();
-    const [completeOrder, setCompleteOrder] = useState(false);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [city, setCity] = useState('');
     const [street, setStreet] = useState('');
     const [house, setHouse] = useState('');
     const [errorEmptyInput, setErrorEmptyInput] = useState('');
+    const handleShowModal = () => setShowModal(true);
 
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
@@ -59,27 +67,37 @@ export default function SignUp() {
                     console.log(error);
                 });
             setErrorEmptyInput('');
-            setCompleteOrder(true);
-            
-        } else setErrorEmptyInput('All fields are required!');
+            setName('');
+            setPhone('');
+            setCity('');
+            setStreet('');
+            setHouse('');
+            deleteAllItemsAfterSubmit();
+            handleShowModal();
+        } else {
+            // setCompleteOrder(false);
+            setErrorEmptyInput('All fields are required!');
+        }
     };
 
     const scrollUp = () => {
         window.scrollTo(0, 0);
     };
 
-    return (
-        <>
-            <div className='getStartedHeader'>
-                <img src={Logo} alt='website logo' className='logo' />
-                <Link to='/pizzafolks' className='getStartedHeaderLink'>
-                    {'Back to Pizza Folks'}
-                </Link>
-            </div>
+    let initialValue = 0;
+    let totalPrice = arrayOfOrderFood.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.orderPrice,
+        initialValue
+    );
 
+    return (
+        <div className='address'>
             <Container component='main' maxWidth='xs'>
                 <CssBaseline />
                 <div className={classes.paper}>
+                    <div className='cart-address'>
+                        {`Total price: ${totalPrice} UAH`}
+                    </div>
                     <Typography component='h1' variant='h5'>
                         Delivery
                     </Typography>
@@ -182,8 +200,6 @@ export default function SignUp() {
                         >
                             Submit
                         </Button>
-                        <br />
-                        {completeOrder ? 'Your order is Submited!' : null}
                     </form>
                 </div>
             </Container>
@@ -194,6 +210,6 @@ export default function SignUp() {
                 className='arrow-up'
                 onClick={scrollUp}
             />
-        </>
+        </div>
     );
 }

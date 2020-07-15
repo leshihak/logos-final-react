@@ -11,6 +11,8 @@ import {
     Button,
     Typography,
 } from '@material-ui/core';
+import Address from './Address';
+import SubmitModal from './SubmitModal';
 
 interface Food {
     name: string;
@@ -46,6 +48,8 @@ const useStyles = makeStyles({
 export default function Cart() {
     const classes = useStyles();
     const [arrayOfOrderFood, setArrayOfOrderFood] = useState<any[]>([]);
+    const [showModal, setShowModal] = useState(false);
+    const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         axios
@@ -58,8 +62,24 @@ export default function Cart() {
             });
     }, []);
 
+    const deleteAllItemsAfterSubmit = () => {
+        arrayOfOrderFood.forEach((item) => {
+            console.log(item);
+
+            axios
+                .delete(`http://localhost:3001/cart/${item.id}/`)
+                .then(() => setArrayOfOrderFood([]))
+                .catch((error) => {
+                    console.log(error);
+                });
+        });
+    };
+
     const handleDeleteFood = (id: number) => {
         const food = arrayOfOrderFood.find((food) => food.id === id);
+        const foodDelete = arrayOfOrderFood.filter((food) => food.id !== id);
+
+        setArrayOfOrderFood([...foodDelete]);
 
         axios
             .delete(`http://localhost:3001/cart/${food.id}/`)
@@ -134,10 +154,20 @@ export default function Cart() {
 
             {renderPurchase()}
 
-            {totalPrice === 0? null : <Link className='cart-address' to='/address'>
-                Order | Total price: {`${totalPrice} UAH`}
-            </Link>}
-            
+            {showModal ? (
+                <SubmitModal
+                    handleCloseModal={handleCloseModal}
+                    showModal={showModal}
+                />
+            ) : null}
+
+            {totalPrice === 0 ? null : (
+                <Address
+                    arrayOfOrderFood={arrayOfOrderFood}
+                    deleteAllItemsAfterSubmit={deleteAllItemsAfterSubmit}
+                    setShowModal={setShowModal}
+                />
+            )}
 
             <img
                 src={Arrow}

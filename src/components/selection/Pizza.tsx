@@ -89,13 +89,14 @@ export default function Pizza() {
         const pizza = arrayOfPizzas.find((pizza) => pizza.id === id);
         setArrayOfPizzas([...arrayOfPizzas]);
 
-        pizza.count === 0
-            ? (pizza.orderText = '')
-            : (pizza.orderText = `You order ${pizza.name} ${pizza.title}, amount of ${pizza.count} pieces, price: ${pizza.orderPrice} UAH.`);
+        if (pizza.count === 0) pizza.orderText = '';
+        else {
+            pizza.orderText = `You order ${pizza.name} ${pizza.title}, amount of ${pizza.count} pieces, price: ${pizza.orderPrice} UAH.`;
 
-        axios.post('http://localhost:3001/cart', pizza).catch((error) => {
-            console.log(error);
-        });
+            axios.post('http://localhost:3001/cart', pizza).catch((error) => {
+                console.log(error);
+            });
+        }
     };
 
     useEffect(() => {

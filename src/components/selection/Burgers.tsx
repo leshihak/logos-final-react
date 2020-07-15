@@ -87,13 +87,14 @@ export default function Burgers() {
         const burger = arrayOfBurgers.find((burger) => burger.id === id);
         setArrayOfBurgers([...arrayOfBurgers]);
 
-        burger.count === 0
-            ? (burger.orderText = '')
-            : (burger.orderText = `You order ${burger.name} ${burger.title}, amount of ${burger.count} pieces, price: ${burger.orderPrice} UAH.`);
+        if (burger.count === 0) burger.orderText = '';
+        else {
+            burger.orderText = `You order ${burger.name} ${burger.title}, amount of ${burger.count} pieces, price: ${burger.orderPrice} UAH.`;
 
-        axios.post('http://localhost:3001/cart', burger).catch((error) => {
-            console.log(error);
-        });
+            axios.post('http://localhost:3001/cart', burger).catch((error) => {
+                console.log(error);
+            });
+        }
     };
 
     useEffect(() => {

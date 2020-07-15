@@ -88,13 +88,14 @@ export default function Sushi() {
         const sushi = arrayOfSushi.find((sushi) => sushi.id === id);
         setArrayOfSushi([...arrayOfSushi]);
 
-        sushi.count === 0
-            ? (sushi.orderText = '')
-            : (sushi.orderText = `You order ${sushi.name} ${sushi.title}, amount of ${sushi.count} pieces, price: ${sushi.orderPrice} UAH.`);
+        if (sushi.count === 0) sushi.orderText = '';
+        else {
+            sushi.orderText = `You order ${sushi.name} ${sushi.title}, amount of ${sushi.count} pieces, price: ${sushi.orderPrice} UAH.`;
 
-        axios.post('http://localhost:3001/cart', sushi).catch((error) => {
-            console.log(error);
-        });
+            axios.post('http://localhost:3001/cart', sushi).catch((error) => {
+                console.log(error);
+            });
+        }
     };
 
     useEffect(() => {
