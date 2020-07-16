@@ -73,7 +73,7 @@ export default function SignIn() {
                 setErrorEmptyUser('User is not register in the system');
             } else redirect.push('/pizzafolks');
         } else {
-            setErrorEmptyUser('Maybe some inputs are empty');
+            setErrorEmptyUser('All fields are required!');
         }
     };
 

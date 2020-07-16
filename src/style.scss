@@ -333,6 +333,15 @@ h3 {
         align-items: center;
         flex-direction: column;
     }
+
+    .filter-block {
+        flex-direction: column;
+        height: unset;
+    }
+
+    .cartFood {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 450px) {
